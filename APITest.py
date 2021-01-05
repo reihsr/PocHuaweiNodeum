@@ -3,12 +3,16 @@ import time
 import nodeum_sdk
 from nodeum_sdk.rest import ApiException
 from pprint import pprint
+from jproperties import Properties
 
+configs = Properties()
+with open('config.properties', 'rb') as config_file:
+    configs.load(config_file)
 configuration = nodeum_sdk.Configuration()
 
 # Configure HTTP basic authorization: BasicAuth
-configuration.username = 'admin'#'YOUR_USERNAME'
-configuration.password = 'password'#'YOUR_PASSWORD'
+configuration.username = configs.get("NODEUM_User").data
+configuration.password = configs.get("NODEUM_PWD").data
 #configuration = nodeum_sdk.Configuration()
 # Configure API key authorization: BearerAuth
 #configuration.api_key['Authorization'] = '9Duke5xqeuS0CWTBzuS6hA'#'YOUR_API_KEY'
@@ -17,10 +21,10 @@ configuration.password = 'password'#'YOUR_PASSWORD'
 #configuration.api_key_prefix['Authorization'] = 'Bearer'
 
 # Defining host is optional and default to http://localhost/api/v2
-configuration.host = "http://10.200.133.230:9013/api/v2"
+configuration.host = "http://" + configs.get("NODEUM_HOST").data + "/api/v2"
 
 # Defining host is optional and default to http://localhost/api/v2
-configuration.host = "http://10.200.133.230:9013/api/v2"
+configuration.host = "http://" + configs.get("NODEUM_HOST").data + "/api/v2"
 # Enter a context with an instance of the API client
 with nodeum_sdk.ApiClient(configuration) as api_client:
     # Create an instance of the API class

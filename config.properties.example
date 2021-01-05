@@ -1,0 +1,4 @@
+# Nodeum Credentials
+NODEUM_HOST=localhost
+NODEUM_User=YOUR_USERNAME
+NODEUM_PWD=YOUR_PASSWORD
