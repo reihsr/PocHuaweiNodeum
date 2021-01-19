@@ -15,7 +15,7 @@ class TileSlide(Thread):
    thumbnaillevel = 5
 
    def __init__(self, queue):
-      logging.basicConfig(filename='run1.log', level=logging.DEBUG)
+      logging.basicConfig(filename='run2.log', level=logging.DEBUG)
       Thread.__init__(self)
       self.queue = queue
 
