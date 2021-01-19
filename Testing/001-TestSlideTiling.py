@@ -7,7 +7,7 @@ from time import time
 def preprocessing():
    ts = time()
    slideextension1 = "mrxs"
-   slideextension2 = "svs"
+   slideextension2 = "mrxs"
    datasetpath = "/opt/storage/testImageTiling/"
    outputpath = "/opt/storage/testImageTilingOutput/"
 
@@ -23,6 +23,7 @@ def preprocessing():
    for root, dirs, files in os.walk(datasetpath, topdown=False):
       for name in files:
          if name.endswith(slideextension1) or name.endswith(slideextension2):
+            print(name)
             queue.put((root, outputpath, name, 0))
             #print(os.path.join(root, name))
             #tileSlide( root, outputpath, name, 0)
