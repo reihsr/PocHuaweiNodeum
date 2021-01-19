@@ -9,14 +9,13 @@ import logging
 
 class TileSlide(Thread):
 
-   logger = logging.getLogger('spam_application')
    tileSizeX = 512
    tileSizeY = 512
    cutoff = tileSizeX*tileSizeY
    thumbnaillevel = 5
 
    def __init__(self, queue):
-      self.logger.basicConfig(filename='run1.log', level=logging.DEBUG)
+      logging.basicConfig(filename='run1.log', level=logging.DEBUG)
       Thread.__init__(self)
       self.queue = queue
 
@@ -42,7 +41,7 @@ class TileSlide(Thread):
       return '#%02x%02x%02x' % (0, 0, blueVal)
 
    def tileSlide(self, inputpath, outputpath, imagename, level):
-      self.logger.info(imagename)
+      logging.info(imagename)
       print(imagename)
       startTime = time.time()
 
@@ -61,7 +60,7 @@ class TileSlide(Thread):
       slide = openslide.OpenSlide(os.path.join(inputpath, imagename))
       toc = time.perf_counter()
       print(f"Load Slide in {toc - tic:0.4f} seconds")
-      self.logger.info(f"Load Slide in {toc - tic:0.4f} seconds")
+      logging.info(f"Load Slide in {toc - tic:0.4f} seconds")
 
       # Create Json for Slide
       json_slide = {}
@@ -151,9 +150,9 @@ class TileSlide(Thread):
             tile_image.save(os.path.join(outputFolder, "x" + str(tilePositionX) + "_y" + str(tilePositionY) + '.png'))
             toc = time.perf_counter()
             print(f"Save Tile in {toc - tic:0.4f} seconds")
-            self.logger.info(f"Save Tile in {toc - tic:0.4f} seconds")
+            logging.info(f"Save Tile in {toc - tic:0.4f} seconds")
             print(f"Process Tile in {toc - tac:0.4f} seconds")
-            self.logger.info(f"Process Tile in {toc - tac:0.4f} seconds")
+            logging.info(f"Process Tile in {toc - tac:0.4f} seconds")
             #print("Save Image: " + str(timer - time.time()))
             #timer = time.time()
 
@@ -173,7 +172,7 @@ class TileSlide(Thread):
             timer = time.time()
             plt.close()
             toc = time.perf_counter()
-            self.logger.info(f"Save Histogram in {toc - tic:0.4f} seconds")
+            logging.info(f"Save Histogram in {toc - tic:0.4f} seconds")
             print(f"Save Histogram in {toc - tic:0.4f} seconds")
 
 
@@ -190,6 +189,6 @@ class TileSlide(Thread):
             " tiled into " + str(tilesX * tilesY) + " Tiles (" + str(tilesX) + "x" + str(tilesY) + ") " +
             "in " + str(endTime - startTime) + " secounds.")
 
-      self.logger.info("Slide " + str(imagename) + " [" + str(slideWidth) + "x" + str(slideHeight) + "] "+
+      logging.info("Slide " + str(imagename) + " [" + str(slideWidth) + "x" + str(slideHeight) + "] "+
             " tiled into " + str(tilesX * tilesY) + " Tiles (" + str(tilesX) + "x" + str(tilesY) + ") " +
             "in " + str(endTime - startTime) + " secounds.")

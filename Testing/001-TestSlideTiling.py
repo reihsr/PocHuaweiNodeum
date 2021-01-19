@@ -5,8 +5,7 @@ from threading import Thread
 from time import time
 import logging
 
-logger = logging.getLogger('spam_application')
-logger.basicConfig(filename='run1.log', level=logging.DEBUG)
+logging.basicConfig(filename='run1.log', level=logging.DEBUG)
 
 def preprocessing():
    ts = time()
@@ -27,14 +26,14 @@ def preprocessing():
    for root, dirs, files in os.walk(datasetpath, topdown=False):
       for name in files:
          if name.endswith(slideextension1) or name.endswith(slideextension2):
-            logger.info(name)
+            logging.info(name)
             print(name)
             queue.put((root, outputpath, name, 0))
             #print(os.path.join(root, name))
             #tileSlide( root, outputpath, name, 0)
 
    queue.join()
-   logger.info('Preprocessing took %s', time() - ts)
+   logging.info('Preprocessing took %s', time() - ts)
    print('Preprocessing took %s', time() - ts)
 
 if __name__ == '__main__':
