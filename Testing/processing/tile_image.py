@@ -77,19 +77,19 @@ class TileSlide(Thread):
       thumbnail = slide.get_thumbnail(slide.level_dimensions[thumbnaillevellocal])
       thumbnail.load()
       thumbnail_histogram = thumbnail.histogram()
-      thumbnail.save(os.path.join(outputFolder, str(imagename[:fileExtenstionPosition]) + "_thumbnail.jpg"))
+      thumbnail.save(os.path.join(outputFolder, str(imagename[:fileExtenstionPosition]) + "_thumbnail.png"))
       plt.figure(0)
       for i in range(0, 256):
          plt.bar(i, thumbnail_histogram[0:256][i], color=self.getRed(i), edgecolor=self.getRed(i), alpha=0.3)
-      plt.savefig(os.path.join(outputFolder, str(imagename[:fileExtenstionPosition]) + "_thumbnail_histogram_r.jpg"))
+      plt.savefig(os.path.join(outputFolder, str(imagename[:fileExtenstionPosition]) + "_thumbnail_histogram_r.png"))
       plt.figure(1)
       for i in range(0, 256):
          plt.bar(i, thumbnail_histogram[256:512][i], color=self.getGreen(i), edgecolor=self.getGreen(i), alpha=0.3)
-      plt.savefig(os.path.join(outputFolder, str(imagename[:fileExtenstionPosition]) + "_thumbnail_histogram_g.jpg"))
+      plt.savefig(os.path.join(outputFolder, str(imagename[:fileExtenstionPosition]) + "_thumbnail_histogram_g.png"))
       plt.figure(2)
       for i in range(0, 256):
          plt.bar(i, thumbnail_histogram[512:768][i], color=self.getBlue(i), edgecolor=self.getBlue(i), alpha=0.3)
-      plt.savefig(os.path.join(outputFolder, str(imagename[:fileExtenstionPosition]) + "_thumbnail_histogram_b.jpg"))
+      plt.savefig(os.path.join(outputFolder, str(imagename[:fileExtenstionPosition]) + "_thumbnail_histogram_b.png"))
       plt.close()
       json_slide["thumbnail_dimensions"] = slide.level_dimensions[thumbnaillevellocal]
       json_slide["thumbnail_histogram_r"] = thumbnail_histogram[0:256]
@@ -140,7 +140,7 @@ class TileSlide(Thread):
             json_slide["tile"].append(json_tile)
 
             tic = time.perf_counter()
-            tile_image.save(os.path.join(outputFolder, "x" + str(tilePositionX) + "_y" + str(tilePositionY) + '.jpg'))
+            tile_image.save(os.path.join(outputFolder, "x" + str(tilePositionX) + "_y" + str(tilePositionY) + '.png'))
             toc = time.perf_counter()
             print(f"Save Tile in {toc - tic:0.4f} seconds")
             #print("Save Image: " + str(timer - time.time()))
@@ -150,15 +150,15 @@ class TileSlide(Thread):
             plt.figure(0)
             for i in range(0, 256):
                plt.bar(i, tileHistogram[0:256][i], color=getRed(i), edgecolor=getRed(i), alpha=0.3)
-            plt.savefig(os.path.join(outputFolder, "x" + str(tilePositionX) + "_y" + str(tilePositionY) + '_r.jpg'))
+            plt.savefig(os.path.join(outputFolder, "x" + str(tilePositionX) + "_y" + str(tilePositionY) + '_r.png'))
             plt.figure(1)
             for i in range(0, 256):
                plt.bar(i, tileHistogram[256:512][i], color=getGreen(i), edgecolor=getGreen(i), alpha=0.3)
-            plt.savefig(os.path.join(outputFolder, "x" + str(tilePositionX) + "_y" + str(tilePositionY) + '_g.jpg'))
+            plt.savefig(os.path.join(outputFolder, "x" + str(tilePositionX) + "_y" + str(tilePositionY) + '_g.png'))
             plt.figure(2)
             for i in range(0, 256):
                plt.bar(i, tileHistogram[512:768][i], color=getBlue(i), edgecolor=getBlue(i), alpha=0.3)
-            plt.savefig(os.path.join(outputFolder, "x" + str(tilePositionX) + "_y" + str(tilePositionY) + '_b.jpg'))
+            plt.savefig(os.path.join(outputFolder, "x" + str(tilePositionX) + "_y" + str(tilePositionY) + '_b.png'))
             print("Save Histogram: " + str(timer - time.time()))
             timer = time.time()
             plt.close()
