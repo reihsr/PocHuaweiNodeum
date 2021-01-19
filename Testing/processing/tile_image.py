@@ -5,9 +5,11 @@ import json
 import openslide
 import matplotlib.pyplot as plt
 from threading import Thread
+import logging
 
 class TileSlide(Thread):
 
+   logging.basicConfig(filename='run1.log', encoding='utf-8', level=logging.DEBUG)
    tileSizeX = 512
    tileSizeY = 512
    cutoff = tileSizeX*tileSizeY
@@ -39,6 +41,7 @@ class TileSlide(Thread):
       return '#%02x%02x%02x' % (0, 0, blueVal)
 
    def tileSlide(self, inputpath, outputpath, imagename, level):
+      self.logging.info(imagename)
       print(imagename)
       startTime = time.time()
 
@@ -57,6 +60,7 @@ class TileSlide(Thread):
       slide = openslide.OpenSlide(os.path.join(inputpath, imagename))
       toc = time.perf_counter()
       print(f"Load Slide in {toc - tic:0.4f} seconds")
+      self.logging.info(f"Load Slide in {toc - tic:0.4f} seconds")
 
       # Create Json for Slide
       json_slide = {}
@@ -108,6 +112,7 @@ class TileSlide(Thread):
 
       for tilePositionX in range(tilesX):
          for tilePositionY in range(tilesY):
+            tac = time.perf_counter()
             json_tile = {}
             json_tile["tile"] = "x" + str(tilePositionX) + "_y" + str(tilePositionY)
             json_tile["pos_x"] = tilePositionX
@@ -145,6 +150,9 @@ class TileSlide(Thread):
             tile_image.save(os.path.join(outputFolder, "x" + str(tilePositionX) + "_y" + str(tilePositionY) + '.png'))
             toc = time.perf_counter()
             print(f"Save Tile in {toc - tic:0.4f} seconds")
+            self.logging.info(f"Save Tile in {toc - tic:0.4f} seconds")
+            print(f"Process Tile in {toc - tac:0.4f} seconds")
+            self.logging.info(f"Process Tile in {toc - tac:0.4f} seconds")
             #print("Save Image: " + str(timer - time.time()))
             #timer = time.time()
 
@@ -164,6 +172,7 @@ class TileSlide(Thread):
             timer = time.time()
             plt.close()
             toc = time.perf_counter()
+            self.logging.info(f"Save Histogram in {toc - tic:0.4f} seconds")
             print(f"Save Histogram in {toc - tic:0.4f} seconds")
 
 
@@ -177,5 +186,9 @@ class TileSlide(Thread):
 
       endTime = time.time()
       print("Slide " + str(imagename) + " [" + str(slideWidth) + "x" + str(slideHeight) + "] "+
+            " tiled into " + str(tilesX * tilesY) + " Tiles (" + str(tilesX) + "x" + str(tilesY) + ") " +
+            "in " + str(endTime - startTime) + " secounds.")
+
+      self.logging.info("Slide " + str(imagename) + " [" + str(slideWidth) + "x" + str(slideHeight) + "] "+
             " tiled into " + str(tilesX * tilesY) + " Tiles (" + str(tilesX) + "x" + str(tilesY) + ") " +
             "in " + str(endTime - startTime) + " secounds.")
