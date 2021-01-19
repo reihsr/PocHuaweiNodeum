@@ -7,7 +7,7 @@ from time import time
 def preprocessing():
    ts = time()
    slideextension1 = "mrxs"
-   slideextension2 = "mrxs"
+   slideextension2 = "svs"
    datasetpath = "/opt/storage/testImageTiling/"
    outputpath = "/opt/storage/testImageTilingOutput/"
 
