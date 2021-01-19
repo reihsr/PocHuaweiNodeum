@@ -68,10 +68,12 @@ class TileSlide(Thread):
       #json_slide["properties"] = slide.properties
       #json_slide["associated_images"] = slide.associated_images
 
-      print(slide.level_count)
+      thumbnaillevellocal = self.thumbnaillevel
+      if thumbnaillevellocal > slide.level_count:
+          thumbnaillevellocal = slide.level_count
 
       # Create Thumbnail & H istogram
-      thumbnail = slide.get_thumbnail(slide.level_dimensions[self.thumbnaillevel])
+      thumbnail = slide.get_thumbnail(slide.level_dimensions[thumbnaillevellocal])
       thumbnail.load()
       thumbnail_histogram = thumbnail.histogram()
       thumbnail.save(os.path.join(outputFolder, str(imagename[:fileExtenstionPosition]) + "_thumbnail.jpg"))
@@ -88,7 +90,7 @@ class TileSlide(Thread):
          plt.bar(i, thumbnail_histogram[512:768][i], color=self.getBlue(i), edgecolor=self.getBlue(i), alpha=0.3)
       plt.savefig(os.path.join(outputFolder, str(imagename[:fileExtenstionPosition]) + "_thumbnail_histogram_b.jpg"))
       plt.close()
-      json_slide["thumbnail_dimensions"] = slide.level_dimensions[self.thumbnaillevel]
+      json_slide["thumbnail_dimensions"] = slide.level_dimensions[thumbnaillevellocal]
       json_slide["thumbnail_histogram_r"] = thumbnail_histogram[0:256]
       json_slide["thumbnail_histogram_g"] = thumbnail_histogram[256:512]
       json_slide["thumbnail_histogram_b"] = thumbnail_histogram[512:768]
