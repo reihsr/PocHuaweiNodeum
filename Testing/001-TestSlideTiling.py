@@ -12,12 +12,12 @@ def preprocessing():
    slideextension1 = "mrxs"
    slideextension2 = "svs"
    datasetpath = "/opt/storage/testImageTiling/"
-   outputpath = "/opt/storage/testImageTilingOutput/"
+   outputpath = "/opt/storage/testImageTilingOutput2/"
 
    # Preprocessing:
    queue = Queue()
 
-   for x in range(1):
+   for x in range(50):
            worker = TileSlide(queue)
            # Setting daemon to True will let the main thread exit even though the workers are blocking
            worker.daemon = True
