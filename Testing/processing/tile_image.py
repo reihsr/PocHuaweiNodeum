@@ -68,10 +68,10 @@ class TileSlide(Thread):
       #json_slide["properties"] = slide.properties
       #json_slide["associated_images"] = slide.associated_images
 
-      print(slide.level_dimensions)
+      print(slide.level_count)
       thumbnaillevellocal = self.thumbnaillevel
-      if thumbnaillevellocal > slide.level_dimensions:
-          thumbnaillevellocal = slide.level_dimensions
+      if thumbnaillevellocal > slide.level_count-1:
+          thumbnaillevellocal = slide.level_count-1
 
       # Create Thumbnail & H istogram
       thumbnail = slide.get_thumbnail(slide.level_dimensions[thumbnaillevellocal])
