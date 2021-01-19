@@ -161,7 +161,6 @@ class TileSlide(Thread):
             for i in range(0, 256):
                plt.bar(i, tileHistogram[512:768][i], color=self.getBlue(i), edgecolor=self.getBlue(i), alpha=0.3)
             plt.savefig(os.path.join(outputFolder, "x" + str(tilePositionX) + "_y" + str(tilePositionY) + '_b.png'))
-            print("Save Histogram: " + str(timer - time.time()))
             timer = time.time()
             plt.close()
             toc = time.perf_counter()
