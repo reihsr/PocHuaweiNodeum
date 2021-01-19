@@ -39,6 +39,7 @@ class TileSlide(Thread):
       return '#%02x%02x%02x' % (0, 0, blueVal)
 
    def tileSlide(self, inputpath, outputpath, imagename, level):
+      print(imagename)
       startTime = time.time()
 
       # Create Folder
@@ -66,6 +67,8 @@ class TileSlide(Thread):
       json_slide["level_downsamples"] = slide.level_downsamples
       #json_slide["properties"] = slide.properties
       #json_slide["associated_images"] = slide.associated_images
+
+      print(slide.level_count)
 
       # Create Thumbnail & H istogram
       thumbnail = slide.get_thumbnail(slide.level_dimensions[self.thumbnaillevel])
