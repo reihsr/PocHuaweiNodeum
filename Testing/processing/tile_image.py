@@ -9,7 +9,7 @@ import logging
 
 class TileSlide(Thread):
 
-   logging.basicConfig(filename='run1.log', encoding='utf-8', level=logging.DEBUG)
+   logging.basicConfig(filename='run1.log', level=logging.DEBUG)
    tileSizeX = 512
    tileSizeY = 512
    cutoff = tileSizeX*tileSizeY

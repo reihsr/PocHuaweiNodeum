@@ -5,7 +5,7 @@ from threading import Thread
 from time import time
 import logging
 
-logging.basicConfig(filename='run1.log', encoding='utf-8', level=logging.DEBUG)
+logging.basicConfig(filename='run1.log', level=logging.DEBUG)
 
 def preprocessing():
    ts = time()
