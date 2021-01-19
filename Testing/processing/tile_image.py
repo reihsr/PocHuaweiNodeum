@@ -78,6 +78,7 @@ class TileSlide(Thread):
       thumbnail.load()
       thumbnail_histogram = thumbnail.histogram()
       thumbnail.save(os.path.join(outputFolder, str(imagename[:fileExtenstionPosition]) + "_thumbnail.png"))
+
       plt.figure(0)
       for i in range(0, 256):
          plt.bar(i, thumbnail_histogram[0:256][i], color=self.getRed(i), edgecolor=self.getRed(i), alpha=0.3)
@@ -95,6 +96,7 @@ class TileSlide(Thread):
       json_slide["thumbnail_histogram_r"] = thumbnail_histogram[0:256]
       json_slide["thumbnail_histogram_g"] = thumbnail_histogram[256:512]
       json_slide["thumbnail_histogram_b"] = thumbnail_histogram[512:768]
+
 
 
       slideWidth, slideHeight = slide.level_dimensions[level ]
@@ -149,15 +151,15 @@ class TileSlide(Thread):
             tic = time.perf_counter()
             plt.figure(0)
             for i in range(0, 256):
-               plt.bar(i, tileHistogram[0:256][i], color=getRed(i), edgecolor=getRed(i), alpha=0.3)
+               plt.bar(i, tileHistogram[0:256][i], color=self.getRed(i), edgecolor=self.getRed(i), alpha=0.3)
             plt.savefig(os.path.join(outputFolder, "x" + str(tilePositionX) + "_y" + str(tilePositionY) + '_r.png'))
             plt.figure(1)
             for i in range(0, 256):
-               plt.bar(i, tileHistogram[256:512][i], color=getGreen(i), edgecolor=getGreen(i), alpha=0.3)
+               plt.bar(i, tileHistogram[256:512][i], color=self.getGreen(i), edgecolor=self.getGreen(i), alpha=0.3)
             plt.savefig(os.path.join(outputFolder, "x" + str(tilePositionX) + "_y" + str(tilePositionY) + '_g.png'))
             plt.figure(2)
             for i in range(0, 256):
-               plt.bar(i, tileHistogram[512:768][i], color=getBlue(i), edgecolor=getBlue(i), alpha=0.3)
+               plt.bar(i, tileHistogram[512:768][i], color=self.getBlue(i), edgecolor=self.getBlue(i), alpha=0.3)
             plt.savefig(os.path.join(outputFolder, "x" + str(tilePositionX) + "_y" + str(tilePositionY) + '_b.png'))
             print("Save Histogram: " + str(timer - time.time()))
             timer = time.time()
