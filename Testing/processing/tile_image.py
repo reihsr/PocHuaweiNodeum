@@ -156,6 +156,7 @@ class TileSlide(Thread):
             #print("Save Image: " + str(timer - time.time()))
             #timer = time.time()
 
+            '''
             tic = time.perf_counter()
             plt.figure(0)
             for i in range(0, 256):
@@ -174,7 +175,7 @@ class TileSlide(Thread):
             toc = time.perf_counter()
             logging.info(f"Save Histogram in {toc - tic:0.4f} seconds")
             print(f"Save Histogram in {toc - tic:0.4f} seconds")
-
+            '''
 
             tile_image.close()
             #print("Run Closed: " + str(startFor - time.time()))
