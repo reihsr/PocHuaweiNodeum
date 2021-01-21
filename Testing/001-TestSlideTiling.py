@@ -5,14 +5,14 @@ from threading import Thread
 from time import time
 import logging
 
-logging.basicConfig(filename='run2.log', level=logging.DEBUG)
+logging.basicConfig(filename='run3.log', level=logging.DEBUG)
 
 def preprocessing():
    ts = time()
    slideextension1 = "mrxs"
    slideextension2 = "svs"
    datasetpath = "/opt/storage/testImageTiling/"
-   outputpath = "/opt/storage/testImageTilingOutput2/"
+   outputpath = "/opt/storage/testImageTilingOutput3/"
 
    # Preprocessing:
    queue = Queue()
