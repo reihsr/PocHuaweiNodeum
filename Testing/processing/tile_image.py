@@ -104,7 +104,7 @@ class TileSlide(Thread):
       #json_slide["thumbnail_histogram_b"] = thumbnail_histogram[512:768]
 
 
-      slideWidth, slideHeight = slide.level_dimensions[level ]
+      slideWidth, slideHeight = slide.level_dimensions[level]
 
       tilesX = int(slideWidth / self.tileSizeX) + 1
       tilesY = int(slideHeight / self.tileSizeY) + 1
