@@ -5,7 +5,12 @@ import os
 import json
 import time
 import csv
-
+import openslide
+import numpy as np
+import matplotlib.pyplot as plt
+from skimage import filters
+from skimage import color
+from tileProcessing.tile_image import TileSlide
 import tflearn
 import glob
 
@@ -47,7 +52,7 @@ def run_job(tasks_queue):
 
             # Tile Image
             starting_time_tiling = time.perf_counter()
-            tileImage(os.path.join(taskdata["root"], taskdata["name"]), taskdata["name"], os.path.join(taskdata["outputpath"],"deepfocus"))
+            TileSlide(os.path.join(taskdata["root"], taskdata["name"]), taskdata["name"], os.path.join(taskdata["outputpath"],"deepfocus"))
             stop_time_tiling = time.perf_counter()
             loginfo = taskdata["name"] + ": " + f"Run Tile on Slide in {stop_time_tiling - starting_time_tiling:0.4f} seconds"
             print(loginfo)
@@ -58,9 +63,6 @@ def run_job(tasks_queue):
             print(loginfo)
             logging.info(loginfo)
     return True
-
-def tileImage(filepath, filename, outputfile):
-
 
 def runDeepFocus(filepath, filename, outputfile):
     params = deepfocus.hyperparameterModel.hyperparameterModel()
@@ -92,7 +94,7 @@ def analyze(imgpath,model,outputfile):
     plt.imsave('tissue.png', tissueMask) #save the thumb of tissue mask
 
     buffersize=kernelSize*bufferVal;
-    resultMask = thumbnail.astype(numpy.uint8) * 0;
+    resultMask = thumbnail.astype(np.uint8) * 0;
     if stepsize>1:
         resultMask=np.resize(resultMask,( int(resultMask.shape[0]/stepsize) , int(resultMask.shape[1]/stepsize) ,resultMask.shape[2]))
     counter1=0
@@ -108,7 +110,7 @@ def analyze(imgpath,model,outputfile):
 
             if np.mean(tissueMask[i:i+bufferVal,j:j+bufferVal])< (8/16):  #most of them are background
                 continue
-            bigTile=numpy.array(slide.read_region((j*kernelSize,i*kernelSize),0,[buffersize,buffersize]))
+            bigTile=np.array(slide.read_region((j*kernelSize,i*kernelSize),0,[buffersize,buffersize]))
             bigTile=color.rgba2rgb(bigTile)
             sz = bigTile.itemsize
             h, w,cs = bigTile.shape
@@ -142,9 +144,9 @@ def main():
     task_list = Queue()
     processes = []
     #datasetpath = "/opt/storage/testImageTiling/"
-    datasetpath = "E:\\Denk"
+    datasetpath = "/home/reihsr/Documents/development/TestSlides/"
     #outputpath = "/opt/storage/testImageTilingOutput_001/"
-    outputpath = "C:\\temp\\Testing"
+    outputpath = "/home/reihsr/Documents/development/TestSlides/testoutput/"
 
     for root, dirs, files in os.walk(datasetpath, topdown=False):
         for name in files:

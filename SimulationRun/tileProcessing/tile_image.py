@@ -3,7 +3,7 @@ import time
 import logging
 import openslide
 import matplotlib.pyplot as plt
-from Queue import Queue
+from queue import Queue
 from threading import Thread
 import PIL
 
