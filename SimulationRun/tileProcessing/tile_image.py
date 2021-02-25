@@ -106,6 +106,7 @@ class TileSlide():
             self.workingQueue.task_done()
 
     def tileSlide(self, inputpath, outputpath, imagename, level):
+        start_time_total = time.perf_counter()
         print(imagename + ": Stating Tiling")
         fileExtenstionPosition = imagename.rfind(".")
         iamgename_without_extension = str(imagename[:fileExtenstionPosition])
@@ -164,3 +165,8 @@ class TileSlide():
                 self.workingQueue.put((imagename, iamgename_without_extension, tilePositionX, tilePositionY, slideWidth, slideHeight))
 
         self.workingQueue.join()
+
+        end_time_total = time.perf_counter()
+        loginfo = imagename + ": " + f"Processed silde in {end_time_total - start_time_total:0.4f} seconds"
+        print(loginfo)
+        logging.info(loginfo)
