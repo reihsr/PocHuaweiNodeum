@@ -146,10 +146,10 @@ def main():
     number_of_processes = 5
     task_list = Queue()
     processes = []
-    # datasetpath = "/opt/storage/testImageTiling/"
-    # outputpath = "/opt/storage/testImageTilingOutput_001/"
-    datasetpath = "/home/reihsr/Documents/development/TestSlides/"
-    outputpath = "/home/reihsr/Documents/development/TestSlides/testoutput/"
+    datasetpath = "/opt/storage/testImageTiling/"
+    outputpath = "/opt/storage/testOutput1/"
+    # datasetpath = "/home/reihsr/Documents/development/TestSlides/"
+    # outputpath = "/home/reihsr/Documents/development/TestSlides/testoutput/"
 
     for root, dirs, files in os.walk(datasetpath, topdown=False):
         for name in files:
