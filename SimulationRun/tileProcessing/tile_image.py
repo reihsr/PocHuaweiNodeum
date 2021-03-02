@@ -19,7 +19,7 @@ class TileSlide():
     def __init__(self):
         print("CreateTile")
         logging.basicConfig(filename='run_001.log', level=logging.DEBUG)
-        workingQueue = Queue()
+        self.workingQueue = Queue()
 
     def getRed(self, redVal):
         return '#%02x%02x%02x' % (redVal, 0, 0)
@@ -71,7 +71,6 @@ class TileSlide():
 
         start_time_save_tiling = time.perf_counter()
         tile_image.save(os.path.join(self.outputFolder, "x" + str(tilePositionX) + "_y" + str(tilePositionY) + '.png'))
-        tile_image.close()
         end_time_save_tiling = time.perf_counter()
         loginfo = imagename + ": " + f"Save Tile in {end_time_save_tiling - start_time_save_tiling:0.4f} seconds"
         print(loginfo)
@@ -91,13 +90,16 @@ class TileSlide():
         for i in range(0, 256):
             plt.bar(i, tileHistogram[512:768][i], color=self.getBlue(i), edgecolor=self.getBlue(i), alpha=0.3)
         plt.savefig(os.path.join(self.outputFolder, "x" + str(tilePositionX) + "_y" + str(tilePositionY) + '_b.png'))
+
         plt.close()
+        tile_image.close()
+
         end_time_save_histogram_tiling = time.perf_counter()
         loginfo = imagename + ": " + f"Save Histogram for Tile in {end_time_save_histogram_tiling - start_time_save_histogram_tiling:0.4f} seconds"
         print(loginfo)
         logging.info(loginfo)
 
-    def worker(self):
+    def runWorker(self):
         while True:
             imagename, iamgename_without_extension, tilePositionX, tilePositionY, slideWidth, slideHeight = self.workingQueue.get()
             if imagename is None:
@@ -121,7 +123,7 @@ class TileSlide():
 
         # Load Slide
         start_time_load_slide = time.perf_counter()
-        self.slide = openslide.OpenSlide(os.path.join(inputpath, imagename))
+        self.slide = openslide.OpenSlide(os.path.join(inputpath))
         end_time_load_slide = time.perf_counter()
         loginfo = imagename + ": " + f"Load Slide in {end_time_load_slide - start_time_load_slide:0.4f} seconds"
         print(loginfo)
@@ -135,7 +137,7 @@ class TileSlide():
         self.json_slide["level_downsamples"] = self.slide.level_downsamples
 
         # Set Export layer
-        thumbnaillevellocal = self.thumbnaillevel
+        thumbnaillevellocal = level
         if thumbnaillevellocal > self.slide.level_count - 1:
             thumbnaillevellocal = self.slide.level_count - 1
 
@@ -143,7 +145,7 @@ class TileSlide():
         self.json_slide["tile"] = []
 
         # Create Thumbnail & Histogram
-        thumbnail = self.slide.get_thumbnail(self.slide.level_dimensions[thumbnaillevellocal])
+        thumbnail = self.slide.get_thumbnail(self.slide.level_dimensions[self.slide.level_count - 1])
         thumbnail.load()
         thumbnail_histogram = thumbnail.histogram()
         thumbnail.save(os.path.join(self.outputFolder, str(iamgename_without_extension) + "_thumbnail.png"))
@@ -156,7 +158,7 @@ class TileSlide():
         tilesY = int(slideHeight / self.tileSizeY) + 1
 
         for i in range(self.num_threads):
-            worker = Thread(target=worker, args=(self.workingQueue,))
+            worker = Thread(target=self.runWorker)
             worker.setDaemon(True)
             worker.start()
 

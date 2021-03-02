@@ -43,16 +43,19 @@ def run_job(tasks_queue):
             logging.info(taskdata["name"] + ": starting Calculation")
 
             # Run Deep Focus
+            '''
             starting_time_deep_focus = time.perf_counter()
             runDeepFocus(os.path.join(taskdata["root"], taskdata["name"]), taskdata["name"], os.path.join(taskdata["outputpath"],"deepfocus"))
             stop_time_deep_focus = time.perf_counter()
             loginfo = taskdata["name"] + ": " + f"Run DeepFocus on Slide in {stop_time_deep_focus - starting_time_deep_focus:0.4f} seconds"
             print(loginfo)
             logging.info(loginfo)
+            '''
 
             # Tile Image
             starting_time_tiling = time.perf_counter()
-            TileSlide(os.path.join(taskdata["root"], taskdata["name"]), taskdata["name"], os.path.join(taskdata["outputpath"],"deepfocus"))
+            tileing = TileSlide()
+            tileing.tileSlide(os.path.join(taskdata["root"], taskdata["name"]), os.path.join(taskdata["outputpath"]), taskdata["name"], 0)
             stop_time_tiling = time.perf_counter()
             loginfo = taskdata["name"] + ": " + f"Run Tile on Slide in {stop_time_tiling - starting_time_tiling:0.4f} seconds"
             print(loginfo)
