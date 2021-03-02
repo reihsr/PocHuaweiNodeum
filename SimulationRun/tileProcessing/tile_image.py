@@ -8,8 +8,8 @@ from threading import Thread
 import PIL
 
 class TileSlide():
-    tileSizeX = 512
-    tileSizeY = 512
+    tileSizeX = 256
+    tileSizeY = 256
     num_threads = 10
     slide = "error"
     level = 0
