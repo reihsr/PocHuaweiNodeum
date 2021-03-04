@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from queue import Queue
 from threading import Thread
 import PIL
+import queue
 from multiprocessing import Lock, Process, Queue, current_process, cpu_count
 
 class TileSlide():
@@ -103,13 +104,18 @@ class TileSlide():
 
         tile_image.close()
 
-    def runWorker(self):
+    def runWorker(self, tasks_queue):
         while True:
-            imagename, iamgename_without_extension, tilePositionX, tilePositionY, slideWidth, slideHeight = self.workingQueue.get()
-            if imagename is None:
+            try:
+                imagename, iamgename_without_extension, tilePositionX, tilePositionY, slideWidth, slideHeight = tasks_queue.get_nowait()
+            except queue.Empty:
+
                 break
-            self.tileImageTile(imagename, iamgename_without_extension, tilePositionX, tilePositionY, slideWidth, slideHeight)
-            self.workingQueue.task_done()
+            else:
+                if imagename is None:
+                    break
+                self.tileImageTile(imagename, iamgename_without_extension, tilePositionX, tilePositionY, slideWidth, slideHeight)
+                self.workingQueue.task_done()
 
     def tileSlide(self, inputpath, outputpath, imagename, level):
         start_time_total = time.perf_counter()
@@ -168,7 +174,7 @@ class TileSlide():
                 self.workingQueue.put((imagename, iamgename_without_extension, tilePositionX, tilePositionY, slideWidth, slideHeight))
 
         for i in range(self.num_threads):
-            worker = Process(target=self.runWorker)
+            worker = Process(target=self.runWorker, args=(self.workingQueue,))
             processes.append(worker)
             worker.start()
 
