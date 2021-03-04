@@ -104,10 +104,10 @@ class TileSlide():
 
         tile_image.close()
 
-    def runWorker(self, tasks_queue):
+    def runWorker(self):
         while True:
             try:
-                imagename, iamgename_without_extension, tilePositionX, tilePositionY, slideWidth, slideHeight = tasks_queue.get_nowait()
+                imagename, iamgename_without_extension, tilePositionX, tilePositionY, slideWidth, slideHeight = self.workingQueue.get_nowait()
             except queue.Empty:
 
                 break
