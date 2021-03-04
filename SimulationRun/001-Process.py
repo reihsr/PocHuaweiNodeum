@@ -18,7 +18,7 @@ import deepfocus.classificationModel3
 import deepfocus.hyperparameterModel
 
 print("Number of cpu : ", cpu_count())
-logfile="00001_simulation.log"
+logfile="00002_simulation.log"
 logging.basicConfig(filename=logfile, level=logging.DEBUG)
 
 def run_job(tasks_queue):
@@ -147,7 +147,7 @@ def main():
     task_list = Queue()
     processes = []
     datasetpath = "/opt/storage/testImageTiling/"
-    outputpath = "/opt/storage/testOutput1/"
+    outputpath = "/opt/storage/testOutput2/"
     # datasetpath = "/home/reihsr/Documents/development/TestSlides/"
     # outputpath = "/home/reihsr/Documents/development/TestSlides/testoutput/"
 

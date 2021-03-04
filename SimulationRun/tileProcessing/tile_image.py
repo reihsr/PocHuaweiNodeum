@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from queue import Queue
 from threading import Thread
 import PIL
+from multiprocessing import Lock, Process, Queue, current_process, cpu_count
 
 class TileSlide():
     tileSizeX = 256
@@ -18,7 +19,7 @@ class TileSlide():
 
     def __init__(self):
         print("CreateTile")
-        logging.basicConfig(filename='run_001.log', level=logging.DEBUG)
+        logging.basicConfig(filename='run_002.log', level=logging.DEBUG)
         self.workingQueue = Queue()
 
     def getRed(self, redVal):
@@ -76,6 +77,7 @@ class TileSlide():
         print(loginfo)
         logging.info(loginfo)
 
+        '''
         start_time_save_histogram_tiling = time.perf_counter()
         tileHistogram = tile_image.histogram()
         plt.figure(0)
@@ -92,12 +94,14 @@ class TileSlide():
         plt.savefig(os.path.join(self.outputFolder, "x" + str(tilePositionX) + "_y" + str(tilePositionY) + '_b.png'))
 
         plt.close()
-        tile_image.close()
 
         end_time_save_histogram_tiling = time.perf_counter()
         loginfo = imagename + ": " + f"Save Histogram for Tile in {end_time_save_histogram_tiling - start_time_save_histogram_tiling:0.4f} seconds"
         print(loginfo)
         logging.info(loginfo)
+        '''
+
+        tile_image.close()
 
     def runWorker(self):
         while True:
@@ -157,16 +161,19 @@ class TileSlide():
         tilesX = int(slideWidth / self.tileSizeX) + 1
         tilesY = int(slideHeight / self.tileSizeY) + 1
 
-        for i in range(self.num_threads):
-            worker = Thread(target=self.runWorker)
-            worker.setDaemon(True)
-            worker.start()
+        processes = []
 
         for tilePositionX in range(tilesX):
             for tilePositionY in range(tilesY):
                 self.workingQueue.put((imagename, iamgename_without_extension, tilePositionX, tilePositionY, slideWidth, slideHeight))
 
-        self.workingQueue.join()
+        for i in range(self.num_threads):
+            worker = Process(target=self.runWorker)
+            processes.append(worker)
+            worker.start()
+
+        for p in processes:
+            p.join()
 
         end_time_total = time.perf_counter()
         loginfo = imagename + ": " + f"Processed silde in {end_time_total - start_time_total:0.4f} seconds"
