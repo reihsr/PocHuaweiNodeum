@@ -143,13 +143,13 @@ def writeXML(filename,data):
 
 def main():
     slideextension2 = "svs"
-    number_of_processes = 5
+    number_of_processes = 9
     task_list = Queue()
     processes = []
     datasetpath = "/opt/storage/testImageTiling/"
     outputpath = "/opt/storage/testOutput2/"
-    # datasetpath = "/home/reihsr/Documents/development/TestSlides/"
-    # outputpath = "/home/reihsr/Documents/development/TestSlides/testoutput/"
+    #datasetpath = "/home/reihsr/Documents/development/TestSlides/"
+    #outputpath = "/home/reihsr/Documents/development/TestSlides/testoutput/"
 
     for root, dirs, files in os.walk(datasetpath, topdown=False):
         for name in files:

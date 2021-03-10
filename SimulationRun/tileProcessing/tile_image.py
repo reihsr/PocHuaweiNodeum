@@ -8,6 +8,7 @@ from threading import Thread
 import PIL
 import queue
 from multiprocessing import Lock, Process, Queue, current_process, cpu_count
+import json
 
 class TileSlide():
     tileSizeX = 256
@@ -21,7 +22,6 @@ class TileSlide():
     def __init__(self):
         print("CreateTile")
         logging.basicConfig(filename='run_002.log', level=logging.DEBUG)
-        self.workingQueue = Queue()
 
     def getRed(self, redVal):
         return '#%02x%02x%02x' % (redVal, 0, 0)
@@ -104,18 +104,20 @@ class TileSlide():
 
         tile_image.close()
 
-    def runWorker(self):
+    def runWorker(self, workingQueue):
         while True:
             try:
-                imagename, iamgename_without_extension, tilePositionX, tilePositionY, slideWidth, slideHeight = self.workingQueue.get_nowait()
+                #imagename, iamgename_without_extension, tilePositionX, tilePositionY, slideWidth, slideHeight = \
+                task = workingQueue.get_nowait()
             except queue.Empty:
 
                 break
             else:
-                if imagename is None:
+                taskdata = json.loads(task)
+                if taskdata["imagename"] is None:
                     break
-                self.tileImageTile(imagename, iamgename_without_extension, tilePositionX, tilePositionY, slideWidth, slideHeight)
-                self.workingQueue.task_done()
+                self.tileImageTile(taskdata["imagename"], taskdata["iamgename_without_extension"], taskdata["tilePositionX"], taskdata["tilePositionY"], taskdata["slideWidth"], taskdata["slideHeight"])
+        return True
 
     def tileSlide(self, inputpath, outputpath, imagename, level):
         start_time_total = time.perf_counter()
@@ -167,16 +169,21 @@ class TileSlide():
         tilesX = int(slideWidth / self.tileSizeX) + 1
         tilesY = int(slideHeight / self.tileSizeY) + 1
 
+        # Multi Process
+
+        workingQueue = Queue()
         processes = []
 
         for tilePositionX in range(tilesX):
             for tilePositionY in range(tilesY):
-                self.workingQueue.put((imagename, iamgename_without_extension, tilePositionX, tilePositionY, slideWidth, slideHeight))
+                workingQueue.put(json.dumps({"imagename":imagename, "iamgename_without_extension":iamgename_without_extension,
+                                             "tilePositionX":tilePositionX, "tilePositionY":tilePositionY,
+                                             "slideWidth":slideWidth, "slideHeight":slideHeight}))
 
         for i in range(self.num_threads):
-            worker = Process(target=self.runWorker, args=(self.workingQueue,))
-            processes.append(worker)
-            worker.start()
+            workerpros = Process(target=self.runWorker, args=(workingQueue,))
+            processes.append(workerpros)
+            workerpros.start()
 
         for p in processes:
             p.join()
