@@ -54,55 +54,61 @@ class TileSlide():
         logging.info(loginfo)
 
     def tileImageTile(self, imagename, iamgename_without_extension, tilePositionX, tilePositionY, slideWidth, slideHeight):
-        start_time_tiling = time.perf_counter()
-        json_tile = {}
-        json_tile["tile"] = "x" + str(tilePositionX) + "_y" + str(tilePositionY)
-        json_tile["pos_x"] = tilePositionX
-        json_tile["pos_y"] = tilePositionY
-        locationX = tilePositionX * self.tileSizeX
-        locationY = tilePositionY * self.tileSizeY
-        tileWidth = min(slideWidth, locationX + self.tileSizeX) - locationX
-        tileHeight = min(slideHeight, locationY + self.tileSizeY) - locationY
-        json_tile["tileWidth"] = tileWidth
-        json_tile["tileHeight"] = tileHeight
-        tile = self.slide.read_region((locationX, locationY), self.level, (tileWidth, tileHeight))
-        tile.load()
-        tile_image = PIL.Image.new("RGB", tile.size, (255, 255, 255))
-        tile_image.paste(tile, mask=tile.split()[3])
-        self.json_slide["tile"].append(json_tile)
+        try:
+            start_time_tiling = time.perf_counter()
+            json_tile = {}
+            json_tile["tile"] = "x" + str(tilePositionX) + "_y" + str(tilePositionY)
+            json_tile["pos_x"] = tilePositionX
+            json_tile["pos_y"] = tilePositionY
+            locationX = tilePositionX * self.tileSizeX
+            locationY = tilePositionY * self.tileSizeY
+            tileWidth = min(slideWidth, locationX + self.tileSizeX) - locationX
+            tileHeight = min(slideHeight, locationY + self.tileSizeY) - locationY
+            json_tile["tileWidth"] = tileWidth
+            json_tile["tileHeight"] = tileHeight
+            tile = self.slide.read_region((locationX, locationY), self.level, (tileWidth, tileHeight))
+            tile.load()
+            tile_image = PIL.Image.new("RGB", tile.size, (255, 255, 255))
+            tile_image.paste(tile, mask=tile.split()[3])
+            self.json_slide["tile"].append(json_tile)
 
-        start_time_save_tiling = time.perf_counter()
-        tile_image.save(os.path.join(self.outputFolder, "x" + str(tilePositionX) + "_y" + str(tilePositionY) + '.png'))
-        end_time_save_tiling = time.perf_counter()
-        loginfo = imagename + ": " + f"Save Tile in {end_time_save_tiling - start_time_save_tiling:0.4f} seconds"
-        print(loginfo)
-        logging.info(loginfo)
+            start_time_save_tiling = time.perf_counter()
+            tile_image.save(os.path.join(self.outputFolder, "x" + str(tilePositionX) + "_y" + str(tilePositionY) + '.png'))
+            end_time_save_tiling = time.perf_counter()
+            loginfo = imagename + ": " + f"Save Tile in {end_time_save_tiling - start_time_save_tiling:0.4f} seconds"
+            print(loginfo)
+            logging.info(loginfo)
 
-        '''
-        start_time_save_histogram_tiling = time.perf_counter()
-        tileHistogram = tile_image.histogram()
-        plt.figure(0)
-        for i in range(0, 256):
-            plt.bar(i, tileHistogram[0:256][i], color=self.getRed(i), edgecolor=self.getRed(i), alpha=0.3)
-        plt.savefig(os.path.join(self.outputFolder, "x" + str(tilePositionX) + "_y" + str(tilePositionY) + '_r.png'))
-        plt.figure(1)
-        for i in range(0, 256):
-            plt.bar(i, tileHistogram[256:512][i], color=self.getGreen(i), edgecolor=self.getGreen(i), alpha=0.3)
-        plt.savefig(os.path.join(self.outputFolder, "x" + str(tilePositionX) + "_y" + str(tilePositionY) + '_g.png'))
-        plt.figure(2)
-        for i in range(0, 256):
-            plt.bar(i, tileHistogram[512:768][i], color=self.getBlue(i), edgecolor=self.getBlue(i), alpha=0.3)
-        plt.savefig(os.path.join(self.outputFolder, "x" + str(tilePositionX) + "_y" + str(tilePositionY) + '_b.png'))
+            '''
+            start_time_save_histogram_tiling = time.perf_counter()
+            tileHistogram = tile_image.histogram()
+            plt.figure(0)
+            for i in range(0, 256):
+                plt.bar(i, tileHistogram[0:256][i], color=self.getRed(i), edgecolor=self.getRed(i), alpha=0.3)
+            plt.savefig(os.path.join(self.outputFolder, "x" + str(tilePositionX) + "_y" + str(tilePositionY) + '_r.png'))
+            plt.figure(1)
+            for i in range(0, 256):
+                plt.bar(i, tileHistogram[256:512][i], color=self.getGreen(i), edgecolor=self.getGreen(i), alpha=0.3)
+            plt.savefig(os.path.join(self.outputFolder, "x" + str(tilePositionX) + "_y" + str(tilePositionY) + '_g.png'))
+            plt.figure(2)
+            for i in range(0, 256):
+                plt.bar(i, tileHistogram[512:768][i], color=self.getBlue(i), edgecolor=self.getBlue(i), alpha=0.3)
+            plt.savefig(os.path.join(self.outputFolder, "x" + str(tilePositionX) + "_y" + str(tilePositionY) + '_b.png'))
+    
+            plt.close()
+    
+            end_time_save_histogram_tiling = time.perf_counter()
+            loginfo = imagename + ": " + f"Save Histogram for Tile in {end_time_save_histogram_tiling - start_time_save_histogram_tiling:0.4f} seconds"
+            print(loginfo)
+            logging.info(loginfo)
+            '''
 
-        plt.close()
-
-        end_time_save_histogram_tiling = time.perf_counter()
-        loginfo = imagename + ": " + f"Save Histogram for Tile in {end_time_save_histogram_tiling - start_time_save_histogram_tiling:0.4f} seconds"
-        print(loginfo)
-        logging.info(loginfo)
-        '''
-
-        tile_image.close()
+            tile_image.close()
+        except Exception as e:
+            print("An exception occurred: ", e)
+            print("Parameters: " + str(imagename) + " - " + str(iamgename_without_extension) + " - " +
+                  str(tilePositionX) + " - " + str(tilePositionY) + " - " + str(slideWidth) + " - " +
+                  str(slideHeight))
 
     def runWorker(self, workingQueue):
         while True:
