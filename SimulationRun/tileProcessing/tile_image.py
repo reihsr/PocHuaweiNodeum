@@ -13,7 +13,7 @@ import json
 class TileSlide():
     tileSizeX = 256
     tileSizeY = 256
-    num_threads = 10
+    num_threads = 40
     slide = "error"
     level = 0
     json_slide = {}

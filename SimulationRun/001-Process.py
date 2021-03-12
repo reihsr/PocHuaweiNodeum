@@ -143,7 +143,7 @@ def writeXML(filename,data):
 
 def main():
     slideextension2 = "svs"
-    number_of_processes = 9
+    number_of_processes = 10
     task_list = Queue()
     processes = []
     datasetpath = "/opt/storage/testImageTiling/"
